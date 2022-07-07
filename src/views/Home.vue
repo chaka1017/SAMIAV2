@@ -47,7 +47,7 @@ export default {
     <Utils />
     <v-container fluid>
       <v-row dense>
-        <v-col md="4" cols="12" class="pl-4 pr-4">
+        <v-col  md="4" cols="12" class="pl-4 pr-4">
           <Missions />
         </v-col>
         <v-col
@@ -81,6 +81,7 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100&display=swap");
+
 
 .utils {
   font-family: "Open Sans", sans-serif;

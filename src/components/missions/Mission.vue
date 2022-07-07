@@ -55,6 +55,5 @@ p {
   margin: 0 !important;
 }
 
-.mission {
-}
+
 </style>

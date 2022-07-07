@@ -39,7 +39,7 @@ export default {
 
     // FORMULAIRE
     chef_delegation: null,
-    cpte_entite: 1,
+    cpte_entite: null,
     objet: null,
     destinations: [],
     membres: null,
@@ -48,7 +48,7 @@ export default {
     contexte: null,
     divers: null,
     procc: 1,
-    procedu: 1,
+    procedu: 108,
     billet: false,
     message: null,
     logic_message: false,
@@ -72,6 +72,8 @@ export default {
     // this.downloadCities();
     // this.getAllCities();
     // this.Initialize();
+    console.log(this.$store.state.processus);
+    this.mes_villes = this.$store.state.villes;
   },
 
   methods: {
@@ -84,29 +86,24 @@ export default {
 
       const data = { entite: this.cpte_entite };
 
-      const jeton = this.$store.state.user["token"];
-      const response = await axios.post(url, data, {
-        headers: { Authorization: "Bearer " + jeton },
-      });
+      const response = await axios.post(url, data);
       this.mesprocedure = response.data;
     },
 
     async updateCities() {
       console.log(this.id_zones);
-      const jeton = this.$store.state.user["token"];
       const data = { zone: this.id_zones };
-      const update_villes = await axios.post("WorldcitiesList/", data, {
-        headers: { Authorization: "Bearer " + jeton },
-      });
+      const update_villes = await axios.post("WorldcitiesList/", data);
       console.log(update_villes);
 
       this.mes_villes = update_villes.data;
     },
 
     async ValiderMission() {
-      const jeton = this.$store.state.user["token"];
       const user = this.$store.state.user["user_id"];
-      this.membres.push(this.chef_delegation);
+      if (this.membres.filter((membre) => membre != this.chef_delegation)) {
+        this.membres.push(this.chef_delegation);
+      }
       const data = {
         chef_delegation: this.chef_delegation,
         cpte_entite: this.cpte_entite,
@@ -124,37 +121,32 @@ export default {
         user: user,
         id_zone: this.id_zones,
       };
-      console.log(data);
+      console.log("Données", data);
       try {
-        let response = await axios.post("mes-missionlist/", data, {
-          headers: { Authorization: "Bearer " + jeton },
-        });
+        let response = await axios.post("mes-missionlist/", data);
         console.log(response);
         this.message = response.data;
         this.couleur_message = response.status;
         this.logic_message = true;
         this.DownloadMissions();
+        this.dialog = false;
       } catch (error) {
         console.log(error.response.data);
         this.message = error.response.data;
         this.couleur_message = error.response.status;
         this.logic_message = true;
+        this.dialog = false;
       }
     },
 
     async DownloadMissions() {
-      const jeton = this.$store.state.user["token"];
       const user = this.$store.state.user["user_id"];
 
       const url5 = "mes-missionlist/traitement/" + user + "/";
       const url6 = "mes-missionlist/" + user + "/";
 
-      const missions_valider = await axios.get(url5, {
-        headers: { Authorization: "Bearer " + jeton },
-      });
-      const missions = await axios.get(url6, {
-        headers: { Authorization: "Bearer " + jeton },
-      });
+      const missions_valider = await axios.get(url5);
+      const missions = await axios.get(url6);
 
       this.$store.dispatch("missions", missions.data);
       this.$store.dispatch("missions_val", missions_valider.data);
@@ -315,9 +307,7 @@ export default {
         <v-btn color="#21209C" style="font-weight: " dark @click="e6 = 3">
           Continue
         </v-btn>
-        <v-btn @click="e6 = 1" text style="text-transform: capitalize">
-          retour
-        </v-btn>
+        <v-btn @click="e6 = 1" text style=""> retour </v-btn>
       </v-stepper-content>
 
       <v-stepper-step
@@ -353,7 +343,6 @@ export default {
                 hint="Ce champs est réquis"
                 label="Selectionnez le processus"
                 :items="processus"
-                :rules="regle"
                 item-text="nom_processus"
                 item-value="id_process"
                 v-model="procedu"
@@ -397,9 +386,7 @@ export default {
         <v-btn color="#21209C" style="font-weight: " dark @click="e6 = 4">
           Continue
         </v-btn>
-        <v-btn text @click="e6 = 2" style="text-transform: capitalize">
-          retour
-        </v-btn>
+        <v-btn text @click="e6 = 2" style=""> retour </v-btn>
       </v-stepper-content>
 
       <v-stepper-step
@@ -436,7 +423,7 @@ export default {
             <v-btn
               color="#21209C"
               dark
-              style="text-transform: capitalize"
+              style=""
               @click="e6 = 1"
               v-on="on"
               v-bind="attrs"
@@ -454,12 +441,7 @@ export default {
               >
               <v-spacer></v-spacer>
               <v-toolbar-items>
-                <v-btn
-                  dark
-                  text
-                  @click.prevent="ValiderMission"
-                  style="text-transform: capitalize"
-                >
+                <v-btn dark text @click.prevent="ValiderMission" style="">
                   Créer la mission
                   <v-icon>mdi-check</v-icon>
                 </v-btn>
@@ -474,19 +456,34 @@ export default {
                   <v-row>
                     <v-col cols="12" md="4">
                       <v-list-item-subtitle>
-                        <i>Objet de la mission</i> : <span>{{ objet }}</span>
+                        <i>Objet de la mission</i> :
+                        <span v-if="objet"
+                          ><v-chip class="ma-2">{{ objet }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="12">
                       <v-list-item-subtitle>
-                        <i>Objectif de la mission</i> :
-                        <span>{{ objectif }}</span>
+                        <v-row>
+                          <v-col cols="12" md="1">
+                            <i>Objectif de la mission</i> :
+                          </v-col>
+                          <v-col cols="12" md="11 ">
+                            <span v-if="objectif">{{ objectif }}</span></v-col
+                          >
+                        </v-row>
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="12">
                       <v-list-item-subtitle>
-                        <i>Context de la mission</i> :
-                        <span>{{ contexte }}</span>
+                        <v-row>
+                          <v-col cols="12" md="1">
+                            <i>Context de la mission</i> :
+                          </v-col>
+                          <v-col cols="12" md="11 ">
+                            <span v-if="contexte">{{ contexte }}</span></v-col
+                          >
+                        </v-row>
                       </v-list-item-subtitle>
                     </v-col>
                   </v-row>
@@ -501,39 +498,52 @@ export default {
                     >Destination & délégation</v-list-item-title
                   >
                   <v-row>
-                    <v-col cols="12" md="4" v-if="chef_delegation">
+                    <v-col cols="12" md="12" v-if="chef_delegation">
                       <v-list-item-subtitle>
                         <i>Chef de la délégation</i> :
-                        <span>{{
-                          employees.find(
-                            (element) => element.id_employe == chef_delegation
-                          )["full_name"]
-                        }}</span>
+                        <span v-if="employees.length != 0">
+                          <v-chip class="ma-2">
+                            {{
+                              employees.find(
+                                (element) =>
+                                  element.id_employe == chef_delegation
+                              )["full_name"]
+                            }}</v-chip
+                          ></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4" v-if="membres">
+                    <v-col
+                      style="padding-bottom: 0px"
+                      cols="12"
+                      md="12"
+                      v-if="membres"
+                    >
                       <v-list-item-subtitle>
                         <i>Membres de la délégation</i> :
                         <span v-for="(membre, k) in membres" :key="k"
-                          >{{
+                          ><v-chip class="ma-2">{{
                             employees.find(
                               (element) => element.id_employe == membre
                             )["full_name"]
-                          }}
-                          ,
+                          }}</v-chip>
                         </span>
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4" v-if="destinations">
+                    <v-col
+                      style="padding-bottom: 0px"
+                      cols="12"
+                      md="12"
+                      v-if="destinations"
+                    >
                       <v-list-item-subtitle>
                         <i>Destinations de la mission</i> :
                         <span v-for="(destination, r) in destinations" :key="r">
-                          {{
+                          <v-chip class="ma-2">{{
                             villes.find((element) => element.id == destination)[
                               "city"
                             ]
-                          }}
-                          ,
+                          }}</v-chip>
                         </span>
                       </v-list-item-subtitle>
                     </v-col>
@@ -546,42 +556,74 @@ export default {
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>Processus de validation</v-list-item-title>
-                  <v-row>
-                    <v-col cols="12" md="4">
+                  <v-row class="mt-2">
+                    <v-col
+                      style="padding-bottom: 0px"
+                      cols="12"
+                      md="12"
+                      v-if="cpte_entite"
+                    >
                       <v-list-item-subtitle>
                         <i>Mission au compte de</i> :
-                        <span>{{ entites.find(element => element.id_entite == cpte_entite)['nom_entite'] }}</span>
+                        <span
+                          ><v-chip class="ma-2">{{
+                            entites.find(
+                              (element) => element.id_entite == cpte_entite
+                            )["nom_entite"]
+                          }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      style="padding-bottom: 0px"
+                      cols="12"
+                      md="12"
+                      v-if="procedu"
+                    >
                       <v-list-item-subtitle>
                         <i>Processus</i> :
-                        <span>{{
-                          processus.find(
-                            (element) => (procedu = element.id_process)
-                          )['nom_processus']
-                        }}</span>
+                        <span
+                          ><v-chip class="ma-2">{{
+                            processus.find(
+                              (element) => procedu == element.id_process
+                            )["nom_processus"]
+                          }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col style="padding-bottom: 0px" cols="12" md="12">
                       <v-list-item-subtitle>
                         <i>Regime</i> :
-                        <span>{{
-                          procedure.find(
-                            (element) => (element.procedure = procc)
-                          )["nom_regime"]
-                        }}</span>
+                        <span
+                          ><v-chip class="ma-2" v-if="procc != null">{{
+                            procedure.find(
+                              (element) => element.id_regime == procc
+                            )["nom_regime"]
+                          }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      style="padding-bottom: 0px"
+                      md="4"
+                      v-if="divers"
+                    >
                       <v-list-item-subtitle>
-                        <i>Divers</i> : <span>{{ divers }}</span>
+                        <i>Divers</i> :
+                        <span
+                          ><v-chip class="ma-2">{{ divers }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" style="padding-bottom: 0px" md="12">
                       <v-list-item-subtitle>
                         <i>Billet d'avion</i> :
-                        <span>{{ billet == true ? "Oui" : "Non" }}</span>
+                        <span
+                          ><v-chip class="ma-2">{{
+                            billet == true ? "Oui" : "Non"
+                          }}</v-chip></span
+                        >
                       </v-list-item-subtitle>
                     </v-col>
                   </v-row>
@@ -592,20 +634,26 @@ export default {
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>Duré de la mission</v-list-item-title>
-                  <v-row>
-                    <v-col md="4" v-if="date_mission">
+                  <v-row class="mt-2">
+                    <v-col
+                      md="12"
+                      style="padding-bottom: 0px"
+                      v-if="date_mission"
+                    >
                       <v-list-item-subtitle>
-                        <i>Date de départ</i> :
-                        {{ date_mission[0] }}
+                        <i>Date de départ</i> :<v-chip class="ma-2">
+                          {{ date_mission[0] }}</v-chip
+                        >
                         <!-- <span v-for="(item, i) in date_mission" :key="i"
                           >/{{ item }}/</span
                         > -->
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col md="4" v-if="date_mission">
+                    <v-col md="12" v-if="date_mission">
                       <v-list-item-subtitle>
-                        <i>Date de retour</i> :
-                        {{ date_mission[1] }}
+                        <i>Date de retour</i> :<v-chip class="ma-2">
+                          {{ date_mission[1] }}</v-chip
+                        >
                         <!-- <span v-for="(item, i) in date_mission" :key="i"
                           >/{{ item }}/</span
                         > -->
@@ -618,9 +666,7 @@ export default {
             <v-divider></v-divider>
           </v-card>
         </v-dialog>
-        <v-btn text style="text-transform: capitalize" @click="e6 = 3">
-          retour
-        </v-btn>
+        <v-btn text style="" @click="e6 = 3"> retour </v-btn>
       </v-stepper-content>
     </v-stepper>
   </div>

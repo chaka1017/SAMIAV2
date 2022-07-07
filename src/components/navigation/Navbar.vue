@@ -62,7 +62,7 @@ export default {
       });
 
       this.$store.dispatch("entites", entites.data.results);
-      this.$store.dispatch("processus", processus.data.results);
+      this.$store.dispatch("processus", processus.data);
       this.$store.dispatch("procedure", regime.data.results);
       this.$store.dispatch("employees", employes.data.results);
       this.$store.dispatch("missions", missions.data);
@@ -73,6 +73,7 @@ export default {
     },
     deconnexion() {
       this.$store.dispatch("user", null);
+      this.$store.dispatch("zonelist", null);
       this.$store.dispatch("showLogin", false);
       this.$store.dispatch("missions", null);
       this.$store.dispatch("mobileView", false);
@@ -114,7 +115,6 @@ export default {
       v-model="drawer"
       app
       v-if="user"
-      border
       temporary
     >
       <v-sheet color="grey lighten-4" class="pa-4">
@@ -128,16 +128,12 @@ export default {
           Bienvenue {{ user.lastname }} {{ user.name }}
         </div>
       </v-sheet>
-
-      <!-- <v-divider></v-divider> -->
-
       <v-list nav dense flat>
         <v-list-item-group v-model="selectedItem" color="#F37121">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
-
             <v-list-item-content>
               <v-list-item-title
                 v-text="item.text"
@@ -145,13 +141,9 @@ export default {
               ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <!-- <div v-if="divier.seprateur">
-            <v-divider></v-divider>
-          </div> -->
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-
     <v-app-bar dark flat dense app color="#21209C" v-if="user">
       <v-app-bar-nav-icon @click="drawer = !drawer"
         ><v-icon style="margin-bottom: 5px"
@@ -178,13 +170,9 @@ export default {
           <v-icon>mdi-bell-outline</v-icon>
         </v-btn>
       </v-badge>
-
       <v-btn text>
         <v-icon>mdi-lock-outline</v-icon>
       </v-btn>
-      <!-- <v-btn text @click.prevent="deconnexion">
-        <v-icon>mdi-logout-variant</v-icon>
-      </v-btn> -->
       <div class="text-center">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -192,12 +180,9 @@ export default {
               <v-avatar size="32">
                 <img
                   :src="'http://192.168.0.37:8000' + permissions_user.url_photo"
-                  alt="John"
-                  
+                  alt="samia"
                 />
               </v-avatar>
-
-              <!-- <v-icon>mdi-account-circle-outline</v-icon> -->
             </v-btn>
           </template>
           <v-list dense style="font-weight: bold">
@@ -215,10 +200,6 @@ export default {
 </template>
 
 <style>
-/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap"); */
-/* @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap"); */
-/* @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;300;500;600&display=swap"); */
-/* @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;700&display=swap");
 
 .navbar {

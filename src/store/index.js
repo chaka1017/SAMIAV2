@@ -1,12 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate';
+import Vue from "vue";
+import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
-
-Vue.use(Vuex)
-
-
-
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
@@ -24,70 +20,67 @@ export default new Vuex.Store({
         processus: null,
         procedure: null,
         mamission: null,
-        permissions_user: null,
+        permissions_user: [],
         mymission: null,
-        zonelist:null,
-
+        zonelist: null,
     },
     plugins: [createPersistedState()],
 
     getters: {
         edit_mission: (state) => {
-            return state.edit_mission
+            return state.edit_mission;
         },
         zonelist: (state) => {
-            return state.zonelist
+            return state.zonelist;
         },
         displayMymission: (state) => {
-            return state.displayMymission
+            return state.displayMymission;
         },
         user: (state) => {
-            return state.user
+            return state.user;
         },
         missions: (state) => {
-            return state.missions
+            return state.missions;
         },
         missions_val: (state) => {
-            return state.missions_val
+            return state.missions_val;
         },
         showLogin: (state) => {
-            return state.showLogin
+            return state.showLogin;
         },
         mobileView: (state) => {
-            return state.mobileView
+            return state.mobileView;
         },
         displayUtils: (state) => {
-            return state.displayUtils
+            return state.displayUtils;
         },
         displayForm: (state) => {
-            return state.displayForm
+            return state.displayForm;
         },
         villes: (state) => {
-            return state.villes
+            return state.villes;
         },
         employees: (state) => {
-            return state.employees
+            return state.employees;
         },
         entites: (state) => {
-            return state.entites
+            return state.entites;
         },
         processus: (state) => {
-            return state.processus
+            return state.processus;
         },
         procedure: (state) => {
-            return state.procedure
+            return state.procedure;
         },
         mamission: (state) => {
-            return state.mamission
+            return state.mamission;
         },
         permissions_user: (state) => {
-            return state.permissions_user
+            return state.permissions_user;
         },
         mymission: (state) => {
-            return state.mymission
+            return state.mymission;
         },
-
-
     },
     mutations: {
         edit_mission(state, edit_mission) {
@@ -100,13 +93,13 @@ export default new Vuex.Store({
             state.displayMymission = displayMymission;
         },
         user(state, user) {
-            state.user = user
+            state.user = user;
         },
         missions(state, missions) {
-            state.missions = missions
+            state.missions = missions;
         },
         missions_val(state, missions_val) {
-            state.missions_val = missions_val
+            state.missions_val = missions_val;
         },
         showLogin(state, showLogin) {
             state.showLogin = showLogin;
@@ -144,66 +137,62 @@ export default new Vuex.Store({
         mymission(state, mymission) {
             state.mymission = mymission;
         },
-
-
-
     },
     actions: {
         zonelist(context, zonelist) {
-            context.commit('zonelist', zonelist)
+            context.commit("zonelist", zonelist);
         },
         edit_mission(context, edit_mission) {
-            context.commit('edit_mission', edit_mission)
+            context.commit("edit_mission", edit_mission);
         },
         displayMymission(context, displayMymission) {
-            context.commit('displayMymission', displayMymission)
+            context.commit("displayMymission", displayMymission);
         },
         user(context, user) {
-            context.commit("user", user)
+            context.commit("user", user);
         },
         missions(context, missions) {
-            context.commit("missions", missions)
+            context.commit("missions", missions);
         },
         missions_val(context, missions_val) {
-            context.commit("missions_val", missions_val)
+            context.commit("missions_val", missions_val);
         },
         showLogin(context, showLogin) {
-            context.commit("showLogin", showLogin)
+            context.commit("showLogin", showLogin);
         },
         mobileView(context, mobileView) {
-            context.commit("mobileView", mobileView)
+            context.commit("mobileView", mobileView);
         },
         displayUtils(context, displayUtils) {
-            context.commit("displayUtils", displayUtils)
+            context.commit("displayUtils", displayUtils);
         },
         displayForm(context, displayForm) {
-            context.commit("displayForm", displayForm)
+            context.commit("displayForm", displayForm);
         },
         villes(context, villes) {
-            context.commit("villes", villes)
+            context.commit("villes", villes);
         },
         employees(context, employees) {
-            context.commit("employees", employees)
+            context.commit("employees", employees);
         },
         entites(context, entites) {
-            context.commit("entites", entites)
+            context.commit("entites", entites);
         },
         processus(context, processus) {
-            context.commit("processus", processus)
+            context.commit("processus", processus);
         },
         procedure(context, procedure) {
-            context.commit("procedure", procedure)
+            context.commit("procedure", procedure);
         },
         mamission(context, mamission) {
-            context.commit("mamission", mamission)
+            context.commit("mamission", mamission);
         },
         permissions_user(context, permissions_user) {
-            context.commit("permissions_user", permissions_user)
+            context.commit("permissions_user", permissions_user);
         },
         mymission(context, mymission) {
-            context.commit("mymission", mymission)
+            context.commit("mymission", mymission);
         },
-
     },
-    modules: {}
-})
+    modules: {},
+});

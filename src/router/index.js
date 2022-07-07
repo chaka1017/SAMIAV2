@@ -1,102 +1,114 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import NotFound from '../views/ErrorPages/NotFound.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import NotFound from "../views/ErrorPages/NotFound.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [{
-        path: '/',
-        name: 'Home',
-        component: Home
+        path: "/",
+        name: "Home",
+        component: Home,
     },
     {
-        path: '/about',
-        name: 'About',
+        path: "/about",
+        name: "About",
 
         component: () =>
-            import ('../views/About.vue')
+            import ("../views/About.vue"),
     },
     {
-        path: '/login',
-        name: 'Login',
+        path: "/login",
+        name: "Login",
 
         component: () =>
-            import ('../views/register/Login.vue')
+            import ("../views/register/Login.vue"),
     },
     {
-        path: '/employes',
-        name: 'Signin',
+        path: "/employes",
+        name: "Signin",
 
         component: () =>
-            import ('../views/register/Signin.vue')
+            import ("../views/register/Signin.vue"),
     },
     {
-        path: '/zone',
-        name: 'Zone',
+        path: "/zone",
+        name: "Zone",
 
         component: () =>
-            import ('../views/Zone.vue')
+            import ("../views/Zone.vue"),
     },
     {
-        path: '/pole',
-        name: 'Pole',
+        path: "/pole",
+        name: "Pole",
 
         component: () =>
-            import ('../views/Pole.vue')
+            import ("../views/Pole.vue"),
     },
     {
-        path: '/filiale',
-        name: 'Filiale',
+        path: "/filiale",
+        name: "Filiale",
 
         component: () =>
-            import ('../views/Filiale.vue')
+            import ("../views/Filiale.vue"),
     },
     {
-        path: '/projet',
-        name: 'Projets',
+        path: "/projet",
+        name: "Projets",
 
         component: () =>
-            import ('../views/Projets.vue')
+            import ("../views/Projets.vue"),
     },
     {
-        path: '/processus',
-        name: 'processus',
+        path: "/processus",
+        name: "processus",
 
         component: () =>
-            import ('../views/Processus.vue')
+            import ("../views/Processus.vue"),
     },
     {
-        path: '/categorie',
-        name: 'categorie',
+        path: "/restore_password",
+        name: "ResetPassowrd",
 
         component: () =>
-            import ('../views/Categorie.vue')
+            import ("../views/register/ResetPassword.vue"),
     },
     {
-        path: '/regime',
-        name: 'regime',
+        path: "/categorie",
+        name: "categorie",
 
         component: () =>
-            import ('../views/Regime.vue')
+            import ("../views/Categorie.vue"),
     },
     {
-        path: '/bareme',
-        name: 'bareme',
+        path: "/regime",
+        name: "regime",
 
         component: () =>
-            import ('../views/Bareme.vue')
+            import ("../views/Regime.vue"),
     },
     {
-        path: '/:catchAll(.*)',
-        component: NotFound
-    }
-]
+        path: "/bareme",
+        name: "bareme",
+
+        component: () =>
+            import ("../views/Bareme.vue"),
+    },
+    {
+        path: "/:catchAll(.*)",
+        component: NotFound,
+    },
+];
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: "history",
     base: process.env.BASE_URL,
-    routes
-})
+    routes,
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+    document.title = to.name;
+    next();
+});
+
+export default router;

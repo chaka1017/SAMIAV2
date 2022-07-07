@@ -56,6 +56,7 @@ export default {
   created() {
     this.InitDownload();
   },
+  
   methods: {
     MakePdf() {
       window.html2canvas = html2canvas;
@@ -170,7 +171,7 @@ export default {
       this.employees = this.$store.state.employees;
       this.entites = this.$store.state.entites;
       this.processus = this.$store.state.processus;
-      console.log(this.processus);
+      console.log("processus", this.processus);
       this.procedure = this.$store.state.procedure;
       this.mymissions = this.$store.state.mymission;
     },
@@ -180,7 +181,7 @@ export default {
       console.log(event);
     },
 
-    AjouterRapport(envoye) {
+    AjouterRapport(envoye, rapport_config) {
       console.log("fi", this.fichier_rapport);
       console.log(this.recommendation);
       console.log(this.$store.state.user.user_id);
@@ -193,6 +194,7 @@ export default {
       data.append("recommendations", this.recommendation);
       data.append("id_createur", this.$store.state.user.user_id);
       data.append("id_envoye1", envoye);
+      data.append("rapport_config", rapport_config);
       data.append("fichier", this.fichier_rapport);
       console.log(data);
       this.resultats = null;
@@ -215,7 +217,7 @@ export default {
     },
 
     HandleReceptionner(val) {
-      alert(val);
+      // alert(val);
       const jeton = this.$store.state.user["token"];
       const user = this.$store.state.user["user_id"];
       const data = new FormData();
@@ -389,7 +391,7 @@ export default {
               ]
             }}
           </v-col>
-          <v-col md="4" cols="12">
+          <v-col md="4" cols="12" v-if="mymission.type_processus">
             <span style="font-weight: 600; color: black">Procesuss :</span>
             {{
               processus.filter(
@@ -706,7 +708,7 @@ export default {
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
-                        v-if="membre.rapport"
+                        v-if="membre.rapport && membre.userid == user.user_id"
                         color="success"
                         outlined
                         v-on="on"
@@ -993,7 +995,7 @@ export default {
                                           outlined
                                           class="mx-3"
                                           @click="
-                                            AjouterRapport(membre.id_envoye)
+                                            AjouterRapport(membre.id_envoye, membre.rapport_config)
                                           "
                                           >OK</v-btn
                                         >

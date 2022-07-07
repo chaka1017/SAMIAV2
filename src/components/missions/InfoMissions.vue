@@ -109,6 +109,7 @@ export default {
     Validate() {
       //   console.log(valeur);
       this.$emit("validation");
+      this.dialog = false;
     },
     Rejeter(val1, val2, val3) {
       this.dialog = false;
@@ -175,7 +176,7 @@ export default {
       elevation="0"
       style="border: 1px #dfe4ea solid; border-top: 4px #f37121 solid"
     >
-      <v-toolbar elevation="0"  style="font-size: 1.3rem">
+      <v-toolbar elevation="0" style="font-size: 1.3rem">
         Mission : {{ num_mission }}
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" width="500">
@@ -191,18 +192,9 @@ export default {
             <v-toolbar style="font-size: 1.3rem" dark
               ><v-btn icon dark @click="dialog = false">
                 <v-icon>mdi-close</v-icon> </v-btn
-              >Confirmer la validation</v-toolbar
+              >{{ titre_boutton }}</v-toolbar
             >
             <v-card-text>
-              <v-alert
-                v-if="message_validation_tr"
-                dismissible
-                dense
-                text
-                type="success"
-              >
-                {{ message_validation_tr }}
-              </v-alert>
               <v-row>
                 <v-col md="12" cols="12">
                   <v-radio-group v-if="etape_mission == 'paiement'">
@@ -215,7 +207,7 @@ export default {
                     <v-radio value="True">
                       <template v-slot:label>
                         <div>
-                          <strong>Chèque</strong>
+                          <strong>Chèque dfdf</strong>
                         </div>
                       </template>
                     </v-radio>
@@ -386,7 +378,11 @@ export default {
                 </v-list-item-content>
 
                 <v-list-item-action class="d-inline">
-                  <v-dialog v-model="membre.dialog" width="500">
+                  <v-dialog
+                    v-model="membre.dialog"
+                    ref="formDialog"
+                    width="500"
+                  >
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         :disabled="
@@ -407,8 +403,12 @@ export default {
                       <v-toolbar
                         style="font-size: 1.3rem; font-weight: 300"
                         dark
-                        >Confirmer la validation</v-toolbar
                       >
+                        <v-btn dark @click="membre.dialog = false" icon>
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        {{ titre_boutton }}
+                      </v-toolbar>
                       <v-card-text>
                         <v-row>
                           <v-col md="12">
@@ -498,10 +498,9 @@ export default {
                     </v-card>
                   </v-dialog>
                   <v-dialog
-                    v-model="membre.dialog_rapport"
+                    v-model="membre.dialog_rapportage"
                     :overlay="false"
-                    max-width="500px"
-                    fullscreen
+                    max-width="1000px"
                     transition="dialog-transition"
                     v-if="
                       permissions_user.rights.filter(
@@ -512,6 +511,7 @@ export default {
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
                         class="mx-2"
+                        :disabled="!membre.rapport == true || !membre.rapport_state.Submitted == true"
                         v-on="on"
                         v-bind="attrs"
                         color="success"
@@ -522,7 +522,11 @@ export default {
                     </template>
                     <v-card>
                       <v-toolbar color="#21209C" dark style="font-size: 1.5rem">
-                        <v-btn icon dark @click="membre.dialog_rapport = false">
+                        <v-btn
+                          icon
+                          dark
+                          @click="membre.dialog_rapportage = false"
+                        >
                           <v-icon>mdi-close</v-icon>
                         </v-btn>
                         <v-toolbar-title>Consulter le rapport</v-toolbar-title>
@@ -535,7 +539,7 @@ export default {
                           target="_blank"
                         >
                           <v-icon>mdi-download</v-icon>
-                          Telecharger le rapport</v-btn
+                          Telecharger la pièce jointe</v-btn
                         >
                         <v-btn
                           outlined
@@ -548,25 +552,25 @@ export default {
                       </v-toolbar>
                       <v-card-text class="d-flex justify-center py-10">
                         <v-row>
-                          <v-col md="6">
+                          <v-col md="6" v-if="objectif_mission">
                             <span style="font-size: 1rem; color: black"
                               >Objectif mission :
                             </span>
                             {{ objectif_mission }}
                           </v-col>
-                          <v-col md="6">
+                          <v-col md="6" v-if="contexte_mission">
                             <span style="font-size: 1rem; color: black"
                               >Contexte mission :
                             </span>
                             {{ contexte_mission }}
                           </v-col>
-                          <v-col md="6">
+                          <v-col md="6" v-if="rapport.resultats_attendu">
                             <span style="font-size: 1rem; color: black"
                               >Résultats attendus :
                             </span>
                             {{ rapport.resultats_attendu }}
                           </v-col>
-                          <v-col md="6">
+                          <v-col md="6" v-if="rapport.recommendations">
                             <span style="font-size: 1rem; color: black"
                               >Recommendations :
                             </span>

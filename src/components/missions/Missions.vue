@@ -16,6 +16,7 @@ export default {
     search_mission_traiter: null,
     missionss: [],
     missions_vals: [],
+    hide_missions_vue: false,
   }),
   components: {
     Mission,
@@ -115,6 +116,7 @@ export default {
     },
     async MyMissionDetail(id) {
       // alert(id);
+      console.log(screen.width);
       const missions = this.$store.state.missions;
       console.log(missions);
       for (let mission of missions) {

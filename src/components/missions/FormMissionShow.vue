@@ -110,6 +110,10 @@ export default {
     paiement_data: {
       data: [],
     },
+
+    couleur_message: null,
+    message_message: null,
+    logic_message: false,
   }),
 
   created() {
@@ -152,80 +156,94 @@ export default {
             })
             .then((resp) => {
               console.log(resp);
-              this.message_validation_tr = resp.data;
-              setTimeout(() => {
-                this.message_validation_tr = null;
-              }, 5000);
+              this.logic_message = true;
+              this.message_message = resp.data;
+              this.couleur_message = resp.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             })
             .catch((err) => {
               console.log(err);
+              this.logic_message = true;
+              this.message_message = err.response.data;
+              this.couleur_message = err.response.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             });
-          // this.dialog_val = false;
-          // this.message_validation = response.data;
-          // setTimeout(() => (this.message_validation = null), 2500);
+          this.$router.push("/");
+
           break;
         case "Validation du rapport":
-          // alert(this.etape_mission);
-
           axios
             .post("Validations/", data, {
               headers: { Authorization: "Bearer " + jeton },
             })
             .then((resp) => {
               console.log(resp);
-              this.message_validation_tr = resp.data;
-              setTimeout(() => {
-                this.message_validation_tr = null;
-              }, 5000);
+              this.logic_message = true;
+              this.message_message = resp.data;
+              this.couleur_message = resp.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             })
             .catch((err) => {
               console.log(err);
+              this.logic_message = true;
+              this.message_message = err.response.data;
+              this.couleur_message = err.response.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             });
-          // this.dialog_val = false;
-          // this.message_validation = response.data;
-          // setTimeout(() => (this.message_validation = null), 2500);
+          this.$router.push("/");
+
           break;
         case "Validation de la justification":
-          // alert(this.etape_mission);
-
           axios
             .post("Validations/", data, {
               headers: { Authorization: "Bearer " + jeton },
             })
             .then((resp) => {
               console.log(resp);
-              this.message_validation_tr = resp.data;
-              setTimeout(() => {
-                this.message_validation_tr = null;
-              }, 5000);
+              this.logic_message = true;
+              this.message_message = resp.data;
+              this.couleur_message = resp.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             })
             .catch((err) => {
               console.log(err);
+              this.logic_message = true;
+              this.message_message = err.response.data;
+              this.couleur_message = err.response.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             });
-          // this.dialog_val = false;
-          // this.message_validation = response.data;
-          // setTimeout(() => (this.message_validation = null), 2500);
+          this.$router.push("/");
+
           break;
         case "validation":
-          // alert(this.etape_mission);
-
           axios
             .post("Validations/", data, {
               headers: { Authorization: "Bearer " + jeton },
             })
             .then((resp) => {
               console.log(resp);
-              this.message_validation_tr = resp.data;
-              setTimeout(() => {
-                this.message_validation_tr = null;
-              }, 5000);
+              this.logic_message = true;
+              this.message_message = resp.data;
+              this.couleur_message = resp.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             })
             .catch((err) => {
               console.log(err);
+              this.logic_message = true;
+              this.message_message = err.response.data;
+              this.couleur_message = err.response.status;
+              console.log(this.message_message);
+              console.log(this.couleur_message);
             });
-          // this.dialog_val = false;
-          // this.message_validation = response.data;
-          // setTimeout(() => (this.message_validation = null), 2500);
+          this.$router.push("/");
+
           break;
 
         case "numero":
@@ -350,14 +368,23 @@ export default {
         validation: "validation",
       };
       const jeton = this.$store.state.user["token"];
-
-      const response = await axios.post(url, data, {
-        headers: { Authorization: "Bearer " + jeton },
-      });
-      console.log(response);
-      this.dialog_val = false;
-      this.message_validation = response.data;
-      setTimeout(() => (this.message_validation = null), 2500);
+      try {
+        const response = await axios.post(url, data, {
+          headers: { Authorization: "Bearer " + jeton },
+        });
+        this.logic_message = true;
+        console.log(response);
+        this.message_message = response.data;
+        this.couleur_message = response.status;
+        console.log(this.message_message);
+        console.log(this.couleur_message);
+      } catch (error) {
+        this.logic_message = true;
+        this.message_message = error.response.data;
+        this.couleur_message = error.response.status;
+        console.log(this.message_message);
+        console.log(this.couleur_message);
+      }
     },
     // Rights Methis
     right_avion() {},
@@ -411,6 +438,7 @@ export default {
             console.log(err);
           });
       }
+      this.miseAjourChamps();
     },
 
     ShowPaiement(value) {
@@ -570,15 +598,13 @@ export default {
 <template>
   <div class="form">
     <v-alert
-      v-model="logic_message_validation"
-      dense
-      prominent
       dismissible
+      :color="couleur_message == 201 ? 'green' : 'red'"
       text
-      type="success"
-      >{{ message_validation }}</v-alert
+      v-model="logic_message"
     >
-
+      {{ message_message }}
+    </v-alert>
     <InfoMissions
       :num_mission="num_mission"
       :objet_mission="objet"
@@ -608,8 +634,6 @@ export default {
 </template>
 
 <style scoped>
-/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap"); */
-/* @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;800&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;300;500;600&display=swap");
 
 .form {
@@ -641,6 +665,5 @@ export default {
   cursor: default;
   /* font-size: 11px; */
   height: 35px;
-  font-weight: ;
 }
 </style>
