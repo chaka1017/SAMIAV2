@@ -217,7 +217,7 @@ export default {
             ></v-text-field>
           </v-card-text>
           <v-card-text style="margin: 0px; padding: 0px">
-            <v-list-item-group color="black">
+            <v-list-item-group v-if="missions " color="black">
               <Mission
                 @show-mission="ShowMyMission"
                 v-for="(mission, i) in missions_val"

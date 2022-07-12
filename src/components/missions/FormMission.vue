@@ -47,8 +47,8 @@ export default {
     objectif: null,
     contexte: null,
     divers: null,
-    procc: 1,
-    procedu: 108,
+    procc: null,
+    procedu: null,
     billet: false,
     message: null,
     logic_message: false,
@@ -72,12 +72,12 @@ export default {
     // this.downloadCities();
     // this.getAllCities();
     // this.Initialize();
-    console.log(this.$store.state.processus);
+    console.log(this.procedu);
     this.mes_villes = this.$store.state.villes;
   },
 
   methods: {
-    alerteur() {
+    alerteur() {  
       alert("bonjour");
     },
 
@@ -335,7 +335,7 @@ export default {
                 v-model="cpte_entite"
               ></v-autocomplete>
             </v-col>
-            <v-col cols="12" sm="6" md="4">
+            <v-col v-if="processus" cols="12" sm="6" md="4">
               <v-select
                 filled
                 outlined
@@ -578,12 +578,12 @@ export default {
                       style="padding-bottom: 0px"
                       cols="12"
                       md="12"
-                      v-if="procedu"
+                      
                     >
                       <v-list-item-subtitle>
                         <i>Processus</i> :
                         <span
-                          ><v-chip class="ma-2">{{
+                          ><v-chip class="ma-2" v-if="procedu != null && processus != null">{{
                             processus.find(
                               (element) => procedu == element.id_process
                             )["nom_processus"]
@@ -595,7 +595,7 @@ export default {
                       <v-list-item-subtitle>
                         <i>Regime</i> :
                         <span
-                          ><v-chip class="ma-2" v-if="procc != null">{{
+                          ><v-chip class="ma-2" v-if="procc != null && procc">{{
                             procedure.find(
                               (element) => element.id_regime == procc
                             )["nom_regime"]
