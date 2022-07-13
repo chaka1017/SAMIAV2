@@ -641,7 +641,7 @@ export default {
                     >
                       <v-list-item-subtitle>
                         <i>Date de départ</i> :<v-chip class="ma-2">
-                          {{ date_mission[0] }}</v-chip
+                          {{ date_mission[0] | formatDate }}</v-chip
                         >
                         <!-- <span v-for="(item, i) in date_mission" :key="i"
                           >/{{ item }}/</span
@@ -651,7 +651,7 @@ export default {
                     <v-col md="12" v-if="date_mission">
                       <v-list-item-subtitle>
                         <i>Date de retour</i> :<v-chip class="ma-2">
-                          {{ date_mission[1] }}</v-chip
+                          {{ date_mission[1] | formatDate }}</v-chip
                         >
                         <!-- <span v-for="(item, i) in date_mission" :key="i"
                           >/{{ item }}/</span
