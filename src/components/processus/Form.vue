@@ -74,7 +74,7 @@ export default {
         headers: { Authorization: "Bearer " + jeton },
       });
 
-      const contraintes = await axios.get("Contrainte/74/", {
+      const contraintes = await axios.get("Contrainte/14/", {
         headers: { Authorization: "Bearer " + jeton },
       });
       this.contraintes = contraintes.data;

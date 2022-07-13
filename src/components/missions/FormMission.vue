@@ -77,7 +77,7 @@ export default {
   },
 
   methods: {
-    alerteur() {  
+    alerteur() {
       alert("bonjour");
     },
 
@@ -574,20 +574,19 @@ export default {
                         >
                       </v-list-item-subtitle>
                     </v-col>
-                    <v-col
-                      style="padding-bottom: 0px"
-                      cols="12"
-                      md="12"
-                      
-                    >
+                    <v-col style="padding-bottom: 0px" cols="12" md="12">
                       <v-list-item-subtitle>
                         <i>Processus</i> :
                         <span
-                          ><v-chip class="ma-2" v-if="procedu != null && processus != null">{{
-                            processus.find(
-                              (element) => procedu == element.id_process
-                            )["nom_processus"]
-                          }}</v-chip></span
+                          ><v-chip
+                            class="ma-2"
+                            v-if="procedu != null && processus != null"
+                            >{{
+                              processus.find(
+                                (element) => procedu == element.id_process
+                              )["nom_processus"]
+                            }}</v-chip
+                          ></span
                         >
                       </v-list-item-subtitle>
                     </v-col>

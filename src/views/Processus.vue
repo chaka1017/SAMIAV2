@@ -145,7 +145,6 @@ export default {
         headers: { Authorization: "Bearer " + jeton },
       });
       console.log(bloc);
-
       this.dialog = false;
       this.DownloadPole();
     },

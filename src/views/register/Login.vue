@@ -210,7 +210,7 @@ export default {
               color="white"
               dark
             >
-              Reinitiliser
+              Reinitialiser
             </v-btn>
             <v-btn
               v-if="is_page_connexion"
