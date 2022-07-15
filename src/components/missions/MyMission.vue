@@ -391,7 +391,7 @@ export default {
               ]
             }}
           </v-col>
-          <v-col md="4" cols="12" v-if="mymission.type_processus">
+          <v-col md="4" cols="12" v-if="mymission.type_processus_id">
             <span style="font-weight: 600; color: black">Procesuss :</span>
             {{
               processus.filter(
